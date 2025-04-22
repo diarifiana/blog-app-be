@@ -4,6 +4,7 @@ import { validateBody } from "../../middlewares/validation.middleware";
 import { AuthController } from "./auth.controller";
 import { RegisterDTO } from "./dto/register.dto";
 import { LoginDTO } from "./dto/login.dto";
+import { ForgotPasswordDTO } from "./dto/forgot-password.dto";
 
 @injectable()
 export class AuthRouter {
@@ -26,6 +27,11 @@ export class AuthRouter {
       "/login",
       validateBody(LoginDTO),
       this.authController.login
+    );
+    this.router.post(
+      "/forgot-password",
+      validateBody(ForgotPasswordDTO),
+      this.authController.forgotPassword
     );
   };
 
