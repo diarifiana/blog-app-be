@@ -23,6 +23,15 @@ export class BlogController {
     }
   };
 
+  getBlogBySlug = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.blogService.getBlogBySlug(req.params.slug);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   createBlog = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const files = req.files as { [fieldName: string]: Express.Multer.File[] };
