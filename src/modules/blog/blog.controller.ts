@@ -49,4 +49,15 @@ export class BlogController {
       next(error);
     }
   };
+
+  deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = Number(req.params.id);
+      const authUserId = Number(res.locals.user.id);
+      const result = await this.blogService.deleteBlog(id, authUserId);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

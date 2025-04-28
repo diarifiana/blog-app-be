@@ -1,12 +1,11 @@
 import { injectable } from "tsyringe";
-import { PrismaService } from "../prisma/prisma.service";
-import { GetBlogsDTO } from "./dto/get-blogs.dto";
 import { Prisma } from "../../generated/prisma";
-import { CreateBlogDTO } from "./dto/create-blog.dto";
-import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { ApiError } from "../../utils/api-error";
 import { generateSlug } from "../../utils/generateSlug";
-import { JwtMiddleware } from "../../middlewares/jwt.middleware";
+import { CloudinaryService } from "../cloudinary/cloudinary.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateBlogDTO } from "./dto/create-blog.dto";
+import { GetBlogsDTO } from "./dto/get-blogs.dto";
 
 @injectable()
 export class BlogService {
@@ -49,7 +48,7 @@ export class BlogService {
 
   getBlogBySlug = async (slug: string) => {
     const blog = await this.prisma.blog.findFirst({
-      where: { slug },
+      where: { slug, deletedAt: null },
       include: { user: { omit: { password: true } } }, // join data
     });
 
@@ -86,5 +85,28 @@ export class BlogService {
         slug,
       },
     });
+  };
+
+  deleteBlog = async (id: number, authUserId: number) => {
+    const blog = await this.prisma.blog.findFirst({
+      where: { id },
+    });
+
+    if (!blog) {
+      throw new ApiError("No data", 400);
+    }
+
+    if (blog.userId !== authUserId) {
+      throw new ApiError("Forbidden", 400);
+    }
+
+    await this.cloudinaryService.remove(blog.thumbnail);
+
+    await this.prisma.blog.update({
+      where: { id },
+      data: { thumbnail: "", deletedAt: new Date() },
+    });
+
+    return { message: "Delete blog success" };
   };
 }
