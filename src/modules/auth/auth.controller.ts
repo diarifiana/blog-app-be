@@ -27,4 +27,24 @@ export class AuthController {
       next(error);
     }
   };
+  forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.authService.forgotPassword(req.body);
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.authService.resetPassword(
+        req.body,
+        res.locals.user.id
+      );
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
