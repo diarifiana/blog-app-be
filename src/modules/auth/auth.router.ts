@@ -34,7 +34,6 @@ export class AuthRouter {
       validateBody(LoginDTO),
       this.authController.login
     );
-
     this.router.post(
       "/forgot-password",
       validateBody(ForgotPasswordDTO),

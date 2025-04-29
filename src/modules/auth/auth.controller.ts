@@ -27,7 +27,6 @@ export class AuthController {
       next(error);
     }
   };
-
   forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await this.authService.forgotPassword(req.body);

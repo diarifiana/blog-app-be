@@ -14,6 +14,7 @@ import { ForgotPasswordDTO } from "./dto/forgot-password.dto";
 import { MailService } from "../mail/mail.service";
 import { ResetPasswordDTO } from "./dto/reset-password.dto";
 
+
 @injectable()
 export class AuthService {
   private prisma: PrismaService;
