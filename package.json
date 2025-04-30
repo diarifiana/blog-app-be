@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-files",
+    "copy-files": "cpx src/modules/mail/templates/**/* dist/modules/mail/templates",
     "start": "npm run build && node dist/index.js",
     "dev": "nodemon src/index.ts",
     "test:integration": "cross-env TEST_TYPE=integration jest --runInBand",
@@ -43,6 +44,7 @@
     "@types/node": "^22.14.0",
     "@types/nodemailer": "^6.4.17",
     "@types/supertest": "^6.0.3",
+    "cpx2": "^8.0.0",
     "jest": "^29.7.0",
     "jest-mock-extended": "^4.0.0-beta1",
     "nodemon": "^3.1.9",
