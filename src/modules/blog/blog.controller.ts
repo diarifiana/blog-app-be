@@ -50,6 +50,22 @@ export class BlogController {
     }
   };
 
+  updateBlog = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const files = req.files as { [fieldName: string]: Express.Multer.File[] };
+      const thumbnail = files.thumbnail?.[0];
+      const result = await this.blogService.updateBlog(
+        Number(req.params.id),
+        req.body,
+        thumbnail,
+        res.locals.user.id
+      );
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);

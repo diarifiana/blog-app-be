@@ -6,6 +6,7 @@ import { UploaderMiddleware } from "../../middlewares/uploader.middleware";
 import { JWT_SECRET_KEY } from "../../config";
 import { CreateBlogDTO } from "./dto/create-blog.dto";
 import { validateBody } from "../../middlewares/validation.middleware";
+import { UpdateBlogDTO } from "./dto/update-blog.dto";
 
 @injectable()
 export class BlogRouter {
@@ -42,6 +43,20 @@ export class BlogRouter {
       ]),
       validateBody(CreateBlogDTO),
       this.blogController.createBlog
+    );
+    this.router.patch(
+      "/:id",
+      this.jwtMiddleware.verifyToken(JWT_SECRET_KEY!),
+      this.uploaderMiddleware
+        .upload()
+        .fields([{ name: "thumbnail", maxCount: 1 }]),
+      this.uploaderMiddleware.fileFilter([
+        "image/jpeg",
+        "image/avif",
+        "image/png",
+      ]),
+      validateBody(UpdateBlogDTO),
+      this.blogController.updateBlog
     );
     this.router.delete(
       "/:id",

@@ -16,6 +16,10 @@ export class UploaderMiddleware {
     return async (req: Request, _res: Response, next: NextFunction) => {
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
+      if (!files || Object.values(files).length === 0) {
+        return next();
+      }
+
       for (const fieldname in files) {
         const fileArray = files[fieldname];
 
